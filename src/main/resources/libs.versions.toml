@@ -1,0 +1,54 @@
+[versions]
+hoplite = "2.7.5"
+hoplite-config-loader = "1.6.0"
+jackson = "2.16.1"
+kasechange = "1.4.1"
+kotest = "5.8.0"
+kotlin-core = "1.9.10"
+kotlin-coroutines = "1.7.3"
+metrics-publisher = "3.5.1"
+mockk = "1.13.8"
+spotless = "6.23.0"
+
+[libraries]
+hoplite-config-loader = { module = "toolshed:hoplite-config-loader", version.ref = "hoplite-config-loader" }
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-hocon = { module = "com.sksamuel.hoplite:hoplite-hocon", version.ref = "hoplite" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
+jackson-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+kasechange = { module = "net.pearx.kasechange:kasechange", version.ref = "kasechange" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-assertions-json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+kotest-extensions = { module = "io.kotest:kotest-extensions", version.ref = "kotest" }
+kotest-framework = { module = "io.kotest:kotest-framework-api-jvm", version.ref = "kotest" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-runner-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+metrics-publisher = { module = "toolshed:metrics-publisher", version.ref = "metrics-publisher" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+[bundles]
+hoplite = [
+    "hoplite-core",
+    "hoplite-hocon"
+]
+
+testing = [
+    "kotest-assertions-core",
+    "kotest-junit5",
+    "kotest-assertions-json",
+    "kotest-extensions",
+    "mockk"
+]
+
+jackson = [
+    "jackson-kotlin",
+    "jackson-jdk8",
+    "jackson-jsr310",
+    "jackson-databind"
+]
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

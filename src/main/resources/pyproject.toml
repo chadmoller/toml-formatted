@@ -1,0 +1,90 @@
+[tool.poetry]
+name = "toml-manager"
+version = "0.0.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+packages = [
+    { include = "toml_manager" }
+]
+
+[[tool.poetry.source]]
+name = "tgt-pypi-mirror"
+url = "https://binrepo.target.com/artifactory/api/pypi/pypi-remote/simple"
+priority = "primary"
+[[tool.poetry.source]]
+name = "pla-pypi-virtual"
+url = "https://binrepo.target.com/artifactory/api/pypi/pla-pypi-virtual/simple"
+priority = "supplemental"
+
+[[tool.poetry.source]]
+# this exists because Artifactory exposes the upload URL differently
+name = "pla-pypi-local"
+url = "https://binrepo.target.com/artifactory/api/pypi/pla-pypi-local"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+click = "^8.1.7"
+pydantic = "^2.6.4"
+
+[tool.poetry.scripts]
+toml-manager = 'toml_manager:cli_entry'
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+flake8 = "^7.0.0"
+flake8-pyproject = "^1.2.3"
+lxml = "^5.1.0"
+pytest = "^8.1.1"
+pytest-cov = "^4.1.0"
+pytest-mypy = "^0.10.3"
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+[tool.flake8]
+select = ['B','C','E','F','W','T4','B9']
+strict = true
+lazy = false
+max-line-length = 120
+max-complexity = 10
+exclude = ['.venv','.*', 'dist']
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths =["tests"]
+# -vvvv = as verbose as it gets
+# -ra = show extra test summary for all except passed
+# coverage options passed via pytest-cov and reporting output in HTML, JUNIT, and TAP form
+addopts = """
+    -vvvv -ra --quiet \
+    --cov --cov-report xml --cov-report html --cov-report term
+"""
+
+# Configure coverage.py, which is enabled in the pytest addopts above
+[tool.coverage.run]
+branch = true
+[tool.coverage.report]
+skip_empty = true
+[tool.coverage.html]
+directory = "build/coverage"
+[tool.coverage.xml]
+output = "build/coverage/coverage.xml"
+[tool.coverage.paths]
+source = ["toml_manager"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

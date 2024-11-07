@@ -1,0 +1,19 @@
+[versions]
+http4k = "5.8.6.0"
+http4k-server = "2.5.1"
+
+[libraries]
+http4k-client-okhttp = { module = "org.http4k:http4k-client-okhttp", version.ref = "http4k" }
+http4k-core = { module = "org.http4k:http4k-core", version.ref = "http4k" }
+http4k-format-jackson = { module = "org.http4k:http4k-format-jackson", version.ref = "http4k" }
+http4k-server = { module = "toolshed:http4k-server", version.ref = "http4k-server" }
+http4k-server-undertow = { module = "org.http4k:http4k-server-undertow", version.ref = "http4k" }
+
+[bundles]
+http4k = [
+    "http4k-core",
+    "http4k-format-jackson",
+    "http4k-server-undertow"
+]
+
+[plugins]

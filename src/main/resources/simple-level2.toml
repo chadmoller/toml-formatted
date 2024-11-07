@@ -1,0 +1,11 @@
+[table.key]
+# Comment 1 for this key
+# Comment 2 for this key
+key."literal" = "value"
+#key."key = part" = "Quoted key"
+
+# Table comment
+[table.key2]
+#key1 = """
+#This is a string"""
+#key2."key = part" = { inline.key1 = 1234, inline.key2 = 1234.5678 }

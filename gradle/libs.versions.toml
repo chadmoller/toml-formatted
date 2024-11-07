@@ -1,0 +1,30 @@
+[versions]
+kotlin = "1.9.10"
+kotlinDate = "0.6.0"
+arrowKt = "1.2.4"
+kotest = "5.9.1"
+junit = "5.11.0"
+mockk = "1.13.11"
+slf4j = "2.0.13"
+spotless = "6.25.0"
+
+[libraries]
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+kotlinDate = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinDate" }
+arrowKt = { module = "io.arrow-kt:arrow-core", version.ref = "arrowKt" }
+kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotestFramework = { module = "io.kotest:kotest-framework-api-jvm", version.ref = "kotest" }
+kotestJunit5= { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotestRunnerJvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotestProperty = { module = "io.kotest:kotest-property-jvm", version.ref = "kotest" }
+kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+kotestExtensions = { module = "io.kotest:kotest-extensions", version.ref = "kotest" }
+junitParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+[bundles]
+testing = ["kotestRunnerJvm", "kotestFramework", "kotestAssertionsCore", "kotestProperty",
+    "kotestAssertionsJson", "kotestExtensions", "kotestJunit5", "junitParams", "mockk"]
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
