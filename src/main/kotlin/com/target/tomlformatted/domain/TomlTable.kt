@@ -1,7 +1,6 @@
 package com.target.tomlformatted.domain
 
 import com.target.tomlformatted.datatree.DataTree
-import com.target.tomlformatted.domain.value.TomlInlineTable.Entry
 import com.target.tomlformatted.domain.value.TomlValue
 import com.target.tomlformatted.parse.TomlParseResult
 
@@ -61,7 +60,6 @@ data class TomlTableLine<T>(
     val value: TomlValue<T>,
     val suffixComment: TomlLineFiller = TomlLineFiller.EMPTY,
 ) : TomlPiece {
-
     companion object {
         fun parse(currentBody: String): TomlParseResult<TomlTableLine<*>> {
             val prefixFillerResult = TomlMultilineFiller.parse(currentBody)
@@ -98,12 +96,13 @@ data class TomlTableLine<T>(
             workingBody = suffixCommentResult.remainingBody
 
             return TomlParseResult.Success(
-                value = TomlTableLine(
-                    prefixFiller = prefixFillerResult.value,
-                    key = keyResult.value,
-                    value = valueResult.value,
-                    suffixComment = suffixCommentResult.value,
-                ),
+                value =
+                    TomlTableLine(
+                        prefixFiller = prefixFillerResult.value,
+                        key = keyResult.value,
+                        value = valueResult.value,
+                        suffixComment = suffixCommentResult.value,
+                    ),
                 remainingBody = workingBody,
             )
         }

@@ -1,15 +1,12 @@
 repositories {
     mavenLocal()
-    maven("https://binrepo.target.com/artifactory/maven-central")
-    maven("https://binrepo.target.com/artifactory/gradle")
-    maven("https://binrepo.target.com/artifactory/toolshed")
+    mavenCentral()
 }
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     `java-library`
-    `maven-publish`
     alias(libs.plugins.spotless)
 }
 
@@ -35,20 +32,6 @@ tasks {
 java {
     withJavadocJar()
     withSourcesJar()
-}
-
-publishing {
-    repositories {
-        maven {
-            url = uri("https://binrepo.target.com/artifactory/product-lifecycle-automation")
-            credentials(PasswordCredentials::class)
-        }
-    }
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
 }
 
 spotless {
