@@ -7,17 +7,9 @@ import com.target.tomlformatted.parse.TomlParseResult
 open class TomlRootTable(
     val lines: List<TomlTableLine<*>>,
 ) : TomlPiece {
-    override fun toTomlString(): String = "${keyTomlString()}${linesTomlString()}"
+    override fun toTomlString(): String = lines.joinToString(separator = "") { it.toTomlString() }
 
-    override fun toString(): String = "${keyString()}{${linesString()}\n}"
-
-    private fun linesTomlString(): String = lines.joinToString(separator = "") { "${it.toTomlString()}\n" }
-
-    private fun linesString(): String = lines.joinToString(separator = "") { "\n\t$it" }
-
-    open fun keyTomlString(): String = ""
-
-    open fun keyString(): String = ""
+    override fun toString(): String = "{\n" + lines.joinToString(separator = "") { "\t$it" } + "}"
 
     fun toTree(): DataTree {
         val tree = DataTree()
@@ -37,17 +29,59 @@ class TomlTable(
     val key: TomlTableKey,
     lines: List<TomlTableLine<*>>,
 ) : TomlRootTable(lines) {
-    override fun keyTomlString(): String = key.toTomlString() + "\n"
+    override fun toTomlString(): String {
+        return key.toTomlString() + super.toTomlString()
+    }
 
-    override fun keyString(): String = "$key"
+    override fun toString(): String {
+        return "$key${super.toString()}"
+    }
 
     fun tableKeys(): List<String> = key.toKeys()
 }
 
 data class TomlTableKey(
     val key: TomlKey,
+    val suffixFiller: TomlLineFiller,
 ) : TomlPiece {
-    override fun toTomlString(): String = "[${key.toTomlString()}]"
+    companion object {
+        fun parse(currentBody: String): TomlParseResult<TomlTableKey> {
+            if (!currentBody.startsWith("[")) {
+                return TomlParseResult.Failure("No opening bracket sign")
+            }
+            var workingBody = currentBody.drop(1)
+
+            val keyResult = TomlKey.parse(workingBody)
+            if (keyResult is TomlParseResult.Failure) {
+                return TomlParseResult.Failure("Key failed: ${keyResult.message}")
+            }
+            keyResult as TomlParseResult.Success
+            workingBody = keyResult.remainingBody
+
+            if (!workingBody.startsWith("]")) {
+                return TomlParseResult.Failure("No closing bracket sign")
+            }
+            workingBody = workingBody.drop(1)
+
+            val suffixFillerResult = TomlLineFiller.parse(workingBody, true)
+            if (suffixFillerResult is TomlParseResult.Failure) {
+                return TomlParseResult.Failure("Suffix filler failed: ${suffixFillerResult.message}")
+            }
+            suffixFillerResult as TomlParseResult.Success
+            workingBody = keyResult.remainingBody
+
+            return TomlParseResult.Success(
+                value =
+                    TomlTableKey(
+                        key = keyResult.value,
+                        suffixFiller = suffixFillerResult.value,
+                    ),
+                remainingBody = workingBody,
+            )
+        }
+    }
+
+    override fun toTomlString(): String = "[${key.toTomlString()}]${suffixFiller.toTomlString()}"
 
     override fun toString(): String = "$key"
 
@@ -108,9 +142,10 @@ data class TomlTableLine<T>(
         }
     }
 
-    override fun toString(): String = "$key=$value"
+    override fun toString(): String = "$key=$value\n"
 
-    override fun toTomlString(): String = "${prefixFiller.toTomlString()}${key.toTomlString()}=${value.toTomlString()}"
+    override fun toTomlString(): String =
+        "${prefixFiller.toTomlString()}${key.toTomlString()}=${value.toTomlString()}${suffixComment.toTomlString()}"
 
     fun toKeys(): List<String> = key.toKeys()
 

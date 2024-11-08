@@ -74,6 +74,7 @@ class TomlFileTest {
                                                     TomlKeyPieceLiteral(value = "tableKey2"),
                                                 ),
                                         ),
+                                    suffixFiller = TomlLineFiller.EMPTY,
                                 ),
                             lines =
                                 listOf(

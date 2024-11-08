@@ -12,12 +12,15 @@ class TomlTableTest {
         TomlTable(
             key =
                 TomlTableKey(
-                    TomlKey(
-                        listOf(
-                            TomlKeyPieceLiteral("key1"),
-                            TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                    key =
+                        TomlKey(
+                            pieces =
+                                listOf(
+                                    TomlKeyPieceLiteral("key1"),
+                                    TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                                ),
                         ),
-                    ),
+                    suffixFiller = TomlLineFiller.EMPTY,
                 ),
             lines =
                 listOf(
@@ -106,16 +109,18 @@ class TomlTableTest {
     fun `TomlTable Key strings`() {
         val key =
             TomlTableKey(
-                TomlKey(
-                    listOf(
-                        TomlKeyPieceLiteral("key"),
-                        TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                key =
+                    TomlKey(
+                        listOf(
+                            TomlKeyPieceLiteral("key"),
+                            TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                        ),
                     ),
-                ),
+                suffixFiller = TomlLineFiller.EMPTY,
             )
 
         assertSoftly(key) {
-            toTomlString() shouldBe "[key. key2]"
+            toTomlString() shouldBe "[key. key2]\n"
             toString() shouldBe "key.key2"
         }
     }
@@ -124,12 +129,14 @@ class TomlTableTest {
     fun `empty TomlTable strings`() {
         val tableKey =
             TomlTableKey(
-                TomlKey(
-                    listOf(
-                        TomlKeyPieceLiteral("key1"),
-                        TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                key =
+                    TomlKey(
+                        listOf(
+                            TomlKeyPieceLiteral("key1"),
+                            TomlKeyPieceLiteral("key2", prefixFiller = TomlFillerWhitespace(" ")),
+                        ),
                     ),
-                ),
+                suffixFiller = TomlLineFiller.EMPTY,
             )
 
         assertSoftly(
